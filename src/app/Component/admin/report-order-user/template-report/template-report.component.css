@@ -1,0 +1,18 @@
+.infor_user , .infor_order , .total_price{
+  padding: 0px 50px;
+}
+.infor_user h2{
+  text-align: center;
+  font-size: 25px;
+  font-weight: 700;
+}
+
+.infor_company h2{
+  font-family: cursive;
+  color: rgb(255, 133, 51);
+}
+
+h4{
+  font-weight: 700;
+  font-size: 15px;
+}

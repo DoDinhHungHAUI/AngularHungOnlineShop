@@ -1,0 +1,117 @@
+
+<form autocomplete="false" novalidate = "true" [formGroup] = "frmProductCategy" >
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-md-3 col-xl-2 control-label">Tên danh mục<span style="color : red">*</span></label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="text" class="form-control" formControlName = "nameProductCategory" placeholder="Tên danh mục"  [(ngModel)]="Name" />
+
+      <app-custom-erproduct-category  *ngIf = "isClickedAddOrEdit == true" [frmTextboxErrorCategoryName] = "frmProductCategy.controls.nameProductCategory" >
+
+      </app-custom-erproduct-category>
+
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-md-3 col-xl-2 control-label">Tên đề SEO <span  style="color : red">*</span></label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="text" formControlName = "tieudeSeo" class="form-control" id="TieudeSeo" placeholder="Tiêu đề seo" [(ngModel)]="Alias">
+      <app-custom-erproduct-category *ngIf = "isClickedAddOrEdit == true" [frmTextboxErrorCategoryName] = "frmProductCategy.controls.tieudeSeo" >
+
+      </app-custom-erproduct-category>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label class="col-sm-3 col-md-3 col-xl-2 control-label">Mô tả ngắn</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="text" class="form-control"  placeholder="Mô tả ngắn" [(ngModel)]="Description" [ngModelOptions]="{standalone: true}" >
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="dmCha" class="col-sm-3 col-md-3 col-xl-2 control-label">Danh mục cha</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <select class="form-control" id="dmCha" [(ngModel)]="ParentID" [ngModelOptions]="{standalone: true}" (change)="selectOption($event)">
+        <option [selected] = "isSelected == item.ID" *ngFor="let item of productCategoryList" value="{{item.ID}}">
+            {{item.Name}}
+        </option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="thuThu" class="col-sm-3 col-md-3 col-xl-2 control-label">Thứ tự</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="number" class="form-control" id="thuThu"  [(ngModel)]="DisplayOrder" [ngModelOptions]="{standalone: true}">
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="thuThu" class="col-sm-3 col-md-3 col-xl-2 control-label">Hình Ảnh</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="text"  class="form-control" id="thuThu" [(ngModel)]="Image" [ngModelOptions]="{standalone: true}">
+    </div>
+  </div>
+
+  <div class="form-group row">
+
+    <label for="thuThu" class="col-sm-3 col-md-3 col-xl-2 control-label">Meta Keyword</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <input type="number" class="form-control" id="thuThu" [(ngModel)]="MetaKeyword" [ngModelOptions]="{standalone: true}" >
+    </div>
+  </div>
+
+  <div class="form-group row">
+    <label for="metaDescription" class="col-sm-3 col-md-3 col-xl-2 control-label">Meta Description</label>
+    <div class="col-sm-9 col-md-9 col-xl-10">
+      <textarea  type="text" class="form-control" id="metaDescription" [(ngModel)]="MetaDescription" [ngModelOptions]="{standalone: true}">
+
+      </textarea>
+      <!-- <app-custom-erproduct-category *ngIf = "isClickedAddOrEdit == true"  [frmTextboxErrorCategoryName] = "frmProductCategy.controls.MetaDescriptions" >
+
+      </app-custom-erproduct-category> -->
+    </div>
+
+  </div>
+
+  <div class="form-group row">
+    <label for="metaDescription" class="col-sm-3 col-md-3 col-xl-2 control-label">Trạng Thái</label>
+    <div class="form-check col-sm-9 col-md-9 col-xl-10">
+      <input  [checked] = "ischecked == 1" class="form-check-input" name="status" type="checkbox" id="gridCheck" (change)="onCheckboxChange($event)">
+      <label class="form-check-label mr-5" for="gridCheck">
+        Kích hoạt
+      </label>
+    </div>
+  </div>
+
+ <div class="form-group row">
+   <div class="col-sm-6 col-md-6 col-xl-6">
+    <button   class="btn btn-primary" (click)="addProductCategory()" *ngIf="ID==0">
+      <i class="fas fa-plus"></i>
+      Add
+    </button>
+    <button (click) = "updateProductCategory()" class="btn btn-primary" *ngIf="ID !=0 ">
+      <i class="far fa-edit"></i>
+      Update
+    </button>
+
+   </div>
+
+   <div class="col-sm-6 col-md-6 col-xl-6">
+    <button (click) = "cancelPopup()"  class="btn btn-danger float-right">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+      </svg>
+      Hủy
+    </button>
+   </div>
+
+ </div>
+</form>
+
+
+
+

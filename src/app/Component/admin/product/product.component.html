@@ -1,0 +1,141 @@
+
+ <div class="content-wrapper">
+  <h3 class="title">Danh Sách Sản Phẩm</h3>
+  <div class="row">
+    <div class="col-sm-3 col-md-3 col-xl-3">
+      <!-- Button trigger modal -->
+      <button (click) = "addClickProduct()" id="addProduct" type="button" class="btn btn-primary float-left mb-2 mt-2" data-toggle="modal" data-target="#exampleModal">
+        <i class="fas fa-plus"></i>
+        Thêm Sản Phẩm
+      </button>
+
+      <a class="btn btn-warning export mb-2 mt-2" (click) = "ExportExcel()" style="margin-left: 5px;color: while;" >
+        <i class="fas fa-file-export"></i>
+        Export Excel
+      </a>
+
+    </div>
+    <div class="col-sm-9 col-md-9 col-xl-9">
+      <nav class="mt-2 mr-5">
+        <input class="form-control" type="text" placeholder="Tìm Kiếm Theo Tên Sản phẩm..." [(ngModel)]="nameSearch" (ngModelChange) = "Search()" />
+      </nav>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h5 class="modal-title" id="exampleModalLabel">{{ModelTitle}}</h5>
+          <button type="button"  (click)="closeClick()" class="close" data-dismiss="modal" aria-label="Close" #closebutton>
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+        </div>
+
+        <div class="modal-body"><!--(ProductCategoryList) = "onGetProductCategoryList($event)"-->
+            <add-edit-product [urlMultipleImageEdit] = "urlMultipleImageEdit" [urlImageedit] = "urlImageedit" [closeButton] = "closeButton" [productModel] = "productModel" *ngIf="ActiveAddEditProduct"></add-edit-product>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <table class="table" id="table">
+    <thead>
+      <tr>
+        <th scope="col">Id</th>
+        <th (click) = "sortName('Name')">Tên Sản phẩm <i class="fas fa-sort"></i></th>
+        <th>Hình ảnh</th>
+        <th>Ngày tạo</th>
+        <th>Trạng Thái</th>
+        <th>Thao Tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of productList | paginate: { itemsPerPage: pageSize, currentPage: p }">
+        <td>{{item.ID}}</td>
+        <td>{{item.Name}}</td>
+        <th>
+          <img src="{{urlImageList + '/' + item.Image}}" alt="" class="img_list">
+        </th>
+        <td>{{item.CreatedDate | date: 'dd/MM/yyyy'}}</td>
+        <td *ngIf="item.Status == true;else content">
+          <span class="badge badge-success">Kích hoạt</span>
+        </td>
+
+        <ng-template #content>
+         <td>
+          <span class="badge badge-danger">Khóa</span>
+         </td>
+        </ng-template>
+          <td>
+            <button (click) = "editProduct(item)" type="button" class="btn btn-light mr-1" data-toggle="modal" data-target="#exampleModal" data-backdrop="static" data-keyboard="false">
+              <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-pencil-square" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456l-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/>
+              </svg>
+            </button>
+          <button (click) = "deleteProduct(item)" data-toggle="modal" data-target="#deleteProduct" type="button" class="btn btn-light mr-1">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+            </svg>
+          </button>
+          </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="row">
+    <div class="col">
+      <pagination-controls  (pageChange)="p = $event" class="float-left">
+      </pagination-controls>
+    </div>
+    <div class="col">
+      <div class="dataTables_length bs-select float-right" id="selectedColumn_length">
+        <span class="float-right">
+          <select class="float-right" (change)="selectPageSize($event)" name="selectedColumn_length" aria-controls="selectedColumn" class="custom-select custom-select-sm form-control form-control-sm">
+            <option value="10" selected>10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+          </select>
+        </span>
+      </div>
+    </div>
+  </div>
+ </div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Xác Nhận</h5>
+        <button type="button" (click)="closeClick()"  class="close" data-dismiss="modal" aria-label="Close" #closebutton>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <p>Bạn có chắc muốn xóa <b>{{NameDelete}}</b> ?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" data-dismiss="modal" aria-label="Close" (click) = "confirmDelete()" class="btn btn-primary">Đồng Ý</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+
+
+
+

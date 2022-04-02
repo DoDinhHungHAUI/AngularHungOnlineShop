@@ -1,0 +1,61 @@
+
+ <div class="content-wrapper">
+  <h3 class="title">Thêm sản phẩm từ file Excel</h3>
+
+  <form [formGroup] = "fileUploadForm">
+
+    <div class="row">
+      <div class="col-sm-3">
+        <select class="form-control" id="dmCha"  [(ngModel)]="CategoryID" formControlName = "CategoryID">
+          <option *ngFor="let item of nameAndIdProductCategory" value="{{item.ID}}">
+              {{item.Name}}
+          </option>
+        </select>
+        <app-custom-error-product  *ngIf="isCheckedError == true" [control] = "fileUploadForm.controls.CategoryID" namecontrol = "Danh mục" ></app-custom-error-product>
+      </div>
+
+      <div class="col-sm-3">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" (change)="onFileSelect($event)" id="customFile" name="myfile" formControlName = "myfile" #UploadFileInput>
+          <label class="custom-file-label" for="customFile">Chọn file...</label>
+          <span *ngIf="fileInputLabel">{{fileInputLabel}}</span>
+          <app-custom-error-product *ngIf="isCheckedError == true" [control] = "fileUploadForm.controls.myfile" namecontrol = "file" ></app-custom-error-product>
+        </div>
+      </div>
+
+      <div class="col-sm-2 col-md-2 col-xl-2">
+        <!-- Button trigger modal -->
+        <a class="btn btn-warning" href="{{urlBaseTemplate}}">
+          <i class="fas fa-download"></i>
+          Download template
+        </a>
+      </div>
+
+      <div class="col-sm-4 col-md-4 col-xl-4">
+        <!-- Button trigger modal -->
+
+        <button (click)="cancelUpload()" type="button" class="btn btn-danger cancel">
+          <i class="fas fa-times"></i>
+          Hủy
+        </button>
+
+        <button (click)="addProductFromExcel()" id="addProductFromExcel" type="button" class="btn btn-primary">
+          <i class="fas fa-plus"></i>
+          Thêm mới
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>
+
+
+
+
+
+
+
+
+
